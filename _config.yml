@@ -1,0 +1,21 @@
+title: G4G4N Blog
+description: Teaching notes, security engineering walkthroughs, and opinionated takes on cybersecurity.
+url: https://blog.g4g4n.com
+baseurl: ""
+markdown: kramdown
+permalink: /:categories/:year/:month/:day/:title/
+timezone: America/New_York
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      author: Gagan Yalamuri
+collections:
+  posts:
+    output: true
