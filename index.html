@@ -11,12 +11,12 @@ title: Dispatches for security operators and curious builders
 <section class="hero section-anchor" id="intro" data-section="intro">
   <div class="hero-copy reveal">
     <p class="eyebrow">Intro</p>
-    <h1>A calm chart for people sailing through noisy security waters.</h1>
+    <h1>Operator writing for noisy security days.</h1>
     <p class="hero-lead">
-      If the internet gives you pirate maps, vague hot takes, and endless “critical” headlines with no usable direction, this site is the opposite of that.
+      If the internet insists on turning every bug, breach, and dashboard into a dramatic monologue, this site is here to be less theatrical and more useful.
     </p>
     <p class="hero-story">
-      You will find current notes on news and incidents, recent articles worth reading in order, and long-running tracks that build real skills over time. The point is to help you navigate, not impress you with jargon.
+      News is for the stories that matter now. Articles are for ideas worth keeping. Tracks are for learning the machinery in the right order, instead of collecting half-understood fragments like rare trading cards for people with terminal tabs.
     </p>
     <div class="hero-actions">
       <a class="button primary" href="#news">Start with news</a>
@@ -25,19 +25,19 @@ title: Dispatches for security operators and curious builders
   </div>
 
   <div class="guide-card reveal">
-    <p class="panel-label mono">How To Use This Site</p>
+    <p class="panel-label mono">Read By Lane</p>
     <div class="guide-list">
       <article>
         <h2>News</h2>
-        <p>Current reporting, reactions, and security events that matter right now.</p>
+        <p>Current reporting, reactions, and incidents with actual operator value.</p>
       </article>
       <article>
         <h2>Articles</h2>
-        <p>Longer reads, opinionated essays, and pieces that stay useful beyond the daily cycle.</p>
+        <p>Longer essays, technical judgment, and pieces meant to age decently.</p>
       </article>
       <article>
         <h2>Tracks</h2>
-        <p>Longer skill-building lanes that teach repeatable knowledge.</p>
+        <p>Stepwise lessons in networking, virtualization, systems, and security craft.</p>
       </article>
     </div>
   </div>
@@ -59,7 +59,6 @@ title: Dispatches for security operators and curious builders
         <span>{{ lead_news.tags | join: " / " }}</span>
         {% endif %}
       </div>
-      <a class="inline-link" href="{{ lead_news.url }}">Read the article</a>
     </article>
     {% endif %}
 
@@ -101,7 +100,7 @@ title: Dispatches for security operators and curious builders
         </div>
         <a class="inline-link" href="{{ post.url }}">Read article</a>
       </article>
-      {% if article_count >= 3 %}
+      {% if article_count >= 5 %}
         {% break %}
       {% endif %}
       {% endunless %}
@@ -123,21 +122,34 @@ title: Dispatches for security operators and curious builders
     <p class="section-note">These are the long-running routes through the site, meant to compound over time.</p>
   </div>
 
-  <div class="track-essays reveal">
-    <article class="track-essay">
-      <p class="panel-label mono">Signal Reading</p>
-      <h3>Interpret the news like an operator.</h3>
-      <p>This lane is where the daily noise gets cross-examined. The internet loves to yell “critical” the way a toddler loves a fire alarm button, so these pieces slow things down, pull the technical issue apart, and ask the only question that really matters: what should a defender actually do with this information today?</p>
-    </article>
-    <article class="track-essay">
-      <p class="panel-label mono">Automation Craft</p>
-      <h3>Learn to build systems that behave well under pressure.</h3>
-      <p>This track is about automation that does not behave like an intern with root access and too much confidence. It covers playbooks, governors, guardrails, and the practical engineering choices that make security automation dependable when the environment gets messy.</p>
-    </article>
-    <article class="track-essay">
-      <p class="panel-label mono">Skill Tracks</p>
-      <h3>Follow a path instead of reading random fragments.</h3>
-      <p>This is the slow-burn lane. Instead of treating knowledge like disconnected trivia, these posts build upward from fundamentals into cloud security, SOAR engineering, threat analysis, and AI-assisted workflows. The goal is not to collect buzzwords like Pokemon cards. The goal is to actually understand the machine.</p>
-    </article>
+  <div class="stream reveal">
+    {% assign track_count = 0 %}
+    {% for post in site.posts %}
+      {% if post.categories contains 'skills' %}
+      {% assign track_count = track_count | plus: 1 %}
+      <article class="stream-item">
+        <p class="panel-label mono">Track</p>
+        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+        <p>{{ post.summary }}</p>
+        <div class="article-meta">
+          <span>{{ post.date | date: "%b %-d, %Y" }}</span>
+          {% if post.tags and post.tags.size > 0 %}
+          <span>{{ post.tags | join: " / " }}</span>
+          {% endif %}
+        </div>
+        <a class="inline-link" href="{{ post.url }}">Read track</a>
+      </article>
+      {% if track_count >= 5 %}
+        {% break %}
+      {% endif %}
+      {% endif %}
+    {% endfor %}
+    {% if track_count == 0 %}
+      <article class="stream-item">
+        <p class="panel-label mono">Track</p>
+        <h3>The learning tracks are still being charted.</h3>
+        <p>This lane will hold the longer skill-building routes through computing, systems, networking, automation, and the machinery underneath security work.</p>
+      </article>
+    {% endif %}
   </div>
 </section>

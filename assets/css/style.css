@@ -174,7 +174,7 @@ img {
 
 .brand {
   font-weight: 800;
-  font-size: 1rem;
+  font-size: 1.32rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
@@ -258,12 +258,12 @@ section {
 }
 
 .hero {
-  min-height: calc(100vh - 240px);
+  min-height: auto;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
   gap: 28px;
   align-items: start;
-  padding-top: 24px;
+  padding-top: 10px;
 }
 
 .hero-copy,
@@ -375,7 +375,17 @@ p {
 .guide-card,
 .post-note {
   border-radius: var(--radius);
-  padding: 28px;
+  padding: 24px 26px;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.8rem, 4.6vw, 4rem);
+  max-width: 11ch;
 }
 
 .guide-card {
@@ -384,17 +394,31 @@ p {
 
 .guide-list {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .guide-list article {
-  padding-top: 18px;
+  padding-top: 14px;
   border-top: 1px solid var(--line);
 }
 
 .guide-list article:first-child {
   padding-top: 0;
   border-top: 0;
+}
+
+.guide-list h2 {
+  font-family: "Manrope", sans-serif;
+  font-size: clamp(1.25rem, 1.65vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin-bottom: 8px;
+}
+
+.guide-list p {
+  color: var(--muted-strong);
+  max-width: 28ch;
 }
 
 .section-heading {
@@ -620,11 +644,19 @@ p {
     font-size: clamp(2.45rem, 12vw, 3.8rem);
   }
 
+  .brand {
+    font-size: 1.12rem;
+  }
+
   .hero-copy,
   .guide-card,
   .post-note,
   .post-content {
     padding: 22px;
+  }
+
+  .hero-copy h1 {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
   }
 
   .prose {
