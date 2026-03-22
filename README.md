@@ -38,3 +38,13 @@ Create a post with:
 ```
 
 That creates a Markdown file in `_posts/`.
+
+## Local preview
+
+Use the Homebrew Ruby if macOS defaults to the system Ruby:
+
+```bash
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+bundle install
+bundle exec jekyll serve
+```

@@ -6,28 +6,78 @@
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
     <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace }}">
     <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <link rel="icon" href="https://g4g4n.com/images/favicon/letter-g.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap"
+      rel="stylesheet"
+    >
+    <script>
+      (() => {
+        const savedTheme = localStorage.getItem("g4g4n-theme");
+        const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
+      })();
+    </script>
     <link rel="stylesheet" href="/assets/css/style.css">
   </head>
-  <body>
+  {% if page.url == "/" %}
+    {% assign is_home = true %}
+  {% else %}
+    {% assign is_home = false %}
+  {% endif %}
+  {% assign latest_post = site.posts.first %}
+  {% capture body_classes %}{% if is_home %}home-page{% endif %}{% if page.layout == 'post' %} post-page{% endif %}{% endcapture %}
+  <body class="{{ body_classes | strip }}">
+    {% if is_home %}
+    <nav class="story-nav" aria-label="Section navigation">
+      <a href="#intro" class="story-link is-active" data-target="intro">Intro</a>
+      <a href="#news" class="story-link" data-target="news">News</a>
+      <a href="#articles" class="story-link" data-target="articles">Articles</a>
+      <a href="#tracks" class="story-link" data-target="tracks">Tracks</a>
+      <span class="story-progress"><span id="story-progress-bar"></span></span>
+    </nav>
+    {% endif %}
+
     <header class="site-header">
-      <div class="wrap">
-        <a class="brand" href="/">{{ site.title }}</a>
-        <nav class="site-nav" aria-label="Main navigation">
-          <a href="/">Home</a>
-          <a href="https://g4g4n.com">Portfolio</a>
-          <a href="https://medium.com/@g4g4n">Medium</a>
-        </nav>
+      <div class="shell">
+        <a class="brand" href="/">G4G4N</a>
+        <div class="header-actions">
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+            <span class="theme-toggle-track">
+              <span class="theme-toggle-thumb"></span>
+            </span>
+            <span class="theme-toggle-text">Dark mode</span>
+          </button>
+        </div>
       </div>
     </header>
 
-    <main class="wrap">
+    <main class="site-shell">
       {{ content }}
     </main>
 
     <footer class="site-footer">
-      <div class="wrap">
-        <p>Published from GitHub Pages at <a href="https://blog.g4g4n.com">blog.g4g4n.com</a>.</p>
+      <div class="shell">
+        <p id="daily-footer-quote">The sea is wide. Good writing should be wider.</p>
+        <p class="footer-meta mono">
+          {{ site.posts | size }} posts{% if latest_post %} · latest {{ latest_post.date | date: "%b %-d" }}{% endif %}
+        </p>
       </div>
     </footer>
+    <script src="/assets/js/site.js" defer></script>
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+      mermaid.initialize({
+        startOnLoad: true,
+        securityLevel: "loose",
+        theme: document.documentElement.dataset.theme === "dark" ? "dark" : "default",
+        themeVariables: {
+          fontFamily: "Manrope, sans-serif"
+        }
+      });
+    </script>
   </body>
 </html>

@@ -1,0 +1,143 @@
+---
+title: Dispatches for security operators and curious builders
+---
+{% assign lead_news = nil %}
+{% for post in site.posts %}
+  {% if post.categories contains 'news' or post.categories contains 'reactions' %}
+    {% assign lead_news = post %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+<section class="hero section-anchor" id="intro" data-section="intro">
+  <div class="hero-copy reveal">
+    <p class="eyebrow">Intro</p>
+    <h1>A calm chart for people sailing through noisy security waters.</h1>
+    <p class="hero-lead">
+      If the internet gives you pirate maps, vague hot takes, and endless “critical” headlines with no usable direction, this site is the opposite of that.
+    </p>
+    <p class="hero-story">
+      You will find current notes on news and incidents, recent articles worth reading in order, and long-running tracks that build real skills over time. The point is to help you navigate, not impress you with jargon.
+    </p>
+    <div class="hero-actions">
+      <a class="button primary" href="#news">Start with news</a>
+      <a class="button secondary" href="#articles">Read the articles</a>
+    </div>
+  </div>
+
+  <div class="guide-card reveal">
+    <p class="panel-label mono">How To Use This Site</p>
+    <div class="guide-list">
+      <article>
+        <h2>News</h2>
+        <p>Current reporting, reactions, and security events that matter right now.</p>
+      </article>
+      <article>
+        <h2>Articles</h2>
+        <p>Longer reads, opinionated essays, and pieces that stay useful beyond the daily cycle.</p>
+      </article>
+      <article>
+        <h2>Tracks</h2>
+        <p>Longer skill-building lanes that teach repeatable knowledge.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="news section-anchor" id="news" data-section="news">
+  <div class="stream reveal">
+    {% if lead_news %}
+    {% assign featured_category = lead_news.categories | first %}
+    <article class="stream-item">
+      <p class="panel-label mono">
+        {% if featured_category == "news" %}News{% elsif featured_category == "skills" %}Track{% elsif featured_category == "reactions" %}Reaction{% else %}Article{% endif %}
+      </p>
+      <h3><a href="{{ lead_news.url }}">{{ lead_news.title }}</a></h3>
+      <p>{{ lead_news.summary }}</p>
+      <div class="article-meta">
+        <span>{{ lead_news.date | date: "%B %-d, %Y" }}</span>
+        {% if lead_news.tags and lead_news.tags.size > 0 %}
+        <span>{{ lead_news.tags | join: " / " }}</span>
+        {% endif %}
+      </div>
+      <a class="inline-link" href="{{ lead_news.url }}">Read the article</a>
+    </article>
+    {% endif %}
+
+    {% for post in site.posts %}
+      {% if post.categories contains 'news' or post.categories contains 'reactions' %}
+        {% if lead_news and post.url != lead_news.url %}
+        {% assign category = post.categories | first %}
+        <article class="stream-item">
+          <p class="panel-label mono">
+            {% if category == "news" %}News{% elsif category == "skills" %}Track{% elsif category == "reactions" %}Reaction{% else %}Article{% endif %}
+          </p>
+          <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+          <p>{{ post.summary }}</p>
+          <div class="article-meta">
+            <span>{{ post.date | date: "%b %-d, %Y" }}</span>
+          </div>
+        </article>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<section class="articles section-anchor" id="articles" data-section="articles">
+  <div class="stream reveal">
+    {% assign article_count = 0 %}
+    {% for post in site.posts %}
+      {% unless post.categories contains 'news' or post.categories contains 'reactions' or post.categories contains 'skills' %}
+      {% assign article_count = article_count | plus: 1 %}
+      {% assign category = post.categories | first %}
+      <article class="stream-item">
+        <p class="panel-label mono">
+          {% if category == "news" %}News{% elsif category == "skills" %}Track{% elsif category == "reactions" %}Reaction{% else %}Article{% endif %}
+        </p>
+        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+        <p>{{ post.summary }}</p>
+        <div class="article-meta">
+          <span>{{ post.date | date: "%b %-d, %Y" }}</span>
+        </div>
+        <a class="inline-link" href="{{ post.url }}">Read article</a>
+      </article>
+      {% if article_count >= 3 %}
+        {% break %}
+      {% endif %}
+      {% endunless %}
+    {% endfor %}
+    {% if article_count == 0 %}
+      <article class="stream-item">
+        <p class="panel-label mono">Article</p>
+        <h3>More long-form articles are on the way.</h3>
+        <p>This section will collect essays, explainers, and durable writing that should still matter after the week’s headlines have faded.</p>
+      </article>
+    {% endif %}
+  </div>
+</section>
+
+<section class="tracks section-anchor" id="tracks" data-section="tracks">
+  <div class="section-heading reveal">
+    <p class="eyebrow">Tracks</p>
+    <h2>Knowledge lanes for building actual skill.</h2>
+    <p class="section-note">These are the long-running routes through the site, meant to compound over time.</p>
+  </div>
+
+  <div class="track-essays reveal">
+    <article class="track-essay">
+      <p class="panel-label mono">Signal Reading</p>
+      <h3>Interpret the news like an operator.</h3>
+      <p>This lane is where the daily noise gets cross-examined. The internet loves to yell “critical” the way a toddler loves a fire alarm button, so these pieces slow things down, pull the technical issue apart, and ask the only question that really matters: what should a defender actually do with this information today?</p>
+    </article>
+    <article class="track-essay">
+      <p class="panel-label mono">Automation Craft</p>
+      <h3>Learn to build systems that behave well under pressure.</h3>
+      <p>This track is about automation that does not behave like an intern with root access and too much confidence. It covers playbooks, governors, guardrails, and the practical engineering choices that make security automation dependable when the environment gets messy.</p>
+    </article>
+    <article class="track-essay">
+      <p class="panel-label mono">Skill Tracks</p>
+      <h3>Follow a path instead of reading random fragments.</h3>
+      <p>This is the slow-burn lane. Instead of treating knowledge like disconnected trivia, these posts build upward from fundamentals into cloud security, SOAR engineering, threat analysis, and AI-assisted workflows. The goal is not to collect buzzwords like Pokemon cards. The goal is to actually understand the machine.</p>
+    </article>
+  </div>
+</section>

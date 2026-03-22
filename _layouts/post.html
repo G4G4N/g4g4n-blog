@@ -1,19 +1,36 @@
 ---
 layout: default
 ---
-<article class="post">
-  <header class="post-header">
-    <p class="post-meta">{{ page.date | date: "%B %-d, %Y" }}{% if page.tags and page.tags.size > 0 %} · {{ page.tags | join: ", " }}{% endif %}</p>
-    <h1>{{ page.title }}</h1>
-    {% if page.summary %}
-    <p class="post-summary">{{ page.summary }}</p>
-    {% endif %}
-  </header>
+{% assign word_count = content | number_of_words %}
+{% assign minutes = word_count | divided_by: 220 %}
+{% if minutes < 1 %}
+  {% assign minutes = 1 %}
+{% endif %}
 
-  <div class="post-content">
+<section class="post-hero">
+  <a class="back-link mono" href="/">Back to archive</a>
+  <p class="eyebrow">Article / {{ page.date | date: "%B %-d, %Y" }}</p>
+  <h1>{{ page.title }}</h1>
+  {% if page.summary %}
+  <p class="post-summary">{{ page.summary }}</p>
+  {% endif %}
+  <div class="article-meta">
+    <span>{{ minutes }} min read</span>
+    <span>{{ page.categories | join: ", " }}</span>
+    {% if page.tags and page.tags.size > 0 %}
+    <span>{{ page.tags | join: " / " }}</span>
+    {% endif %}
+  </div>
+</section>
+
+<article class="post-shell">
+  <div class="post-content prose">
     {{ content }}
   </div>
-  {% if page.canonical_url %}
-  <p class="canonical-note">Originally mirrored from <a href="{{ page.canonical_url }}">{{ page.canonical_url }}</a>.</p>
-  {% endif %}
 </article>
+{% if page.canonical_url %}
+<section class="post-note">
+  <p class="panel-label mono">Canonical Note</p>
+  <p>This piece was mirrored from <a href="{{ page.canonical_url }}">{{ page.canonical_url }}</a>.</p>
+</section>
+{% endif %}
