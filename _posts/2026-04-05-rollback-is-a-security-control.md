@@ -1,6 +1,6 @@
 ---
 title: "Rollback is a security control, not just an ops courtesy"
-date: 2026-04-05 14:10:00 -0400
+date: 2026-04-05 13:55:00 -0400
 categories: [articles]
 tags: [rollback, change-management, security-engineering, reliability, incident-response, systems]
 summary: "Rollback is one of the few controls that reduces the blast radius of both mistakes and attacks, because a system that can back out change cleanly is a system that can recover before small failures become large ones."
