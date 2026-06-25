@@ -7,6 +7,11 @@
     <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace }}">
     <link rel="canonical" href="{{ page.url | absolute_url }}">
     <link rel="icon" href="https://g4g4n.com/images/favicon/letter-g.png" type="image/png">
+    <meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+    <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}">
+    <meta property="og:description" content="{{ page.summary | default: page.excerpt | default: site.description | strip_html | normalize_whitespace }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -15,6 +20,9 @@
     >
     <script>
       (() => {
+        // Mark JS as available so progressive-enhancement styles (scroll
+        // reveal) only hide content when we can guarantee it will reappear.
+        document.documentElement.classList.add("js");
         const savedTheme = localStorage.getItem("g4g4n-theme");
         const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
@@ -30,25 +38,31 @@
   {% assign latest_post = site.posts.first %}
   {% capture body_classes %}{% if is_home %}home-page{% endif %}{% if page.layout == 'post' %} post-page{% endif %}{% endcapture %}
   <body class="{{ body_classes | strip }}">
+    <div class="page-grain" aria-hidden="true"></div>
+    <span class="reading-bar" id="reading-bar" aria-hidden="true"></span>
+
     {% if is_home %}
     <nav class="story-nav" aria-label="Section navigation">
-      <a href="#intro" class="story-link is-active" data-target="intro">Intro</a>
-      <a href="#news" class="story-link" data-target="news">News</a>
-      <a href="#articles" class="story-link" data-target="articles">Articles</a>
-      <a href="#tracks" class="story-link" data-target="tracks">Tracks</a>
+      <a href="#intro" class="story-link is-active" data-target="intro"><span class="story-dot"></span>Intro</a>
+      <a href="#news" class="story-link" data-target="news"><span class="story-dot"></span>News</a>
+      <a href="#articles" class="story-link" data-target="articles"><span class="story-dot"></span>Articles</a>
+      <a href="#tracks" class="story-link" data-target="tracks"><span class="story-dot"></span>Tracks</a>
       <span class="story-progress"><span id="story-progress-bar"></span></span>
     </nav>
     {% endif %}
 
     <header class="site-header">
       <div class="shell">
-        <a class="brand" href="/">G4G4N</a>
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true">G</span>
+          <span class="brand-text">G4G4N<span class="brand-sub">/ Dispatch</span></span>
+        </a>
         <div class="header-actions">
           <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
             <span class="theme-toggle-track">
               <span class="theme-toggle-thumb"></span>
             </span>
-            <span class="theme-toggle-text">Dark mode</span>
+            <span class="theme-toggle-text">Dark</span>
           </button>
         </div>
       </div>
@@ -60,9 +74,12 @@
 
     <footer class="site-footer">
       <div class="shell">
-        <p id="daily-footer-quote">The sea is wide. Good writing should be wider.</p>
+        <div class="footer-top">
+          <a class="brand" href="/"><span class="brand-mark" aria-hidden="true">G</span></a>
+          <p id="daily-footer-quote">The sea is wide. Good writing should be wider.</p>
+        </div>
         <p class="footer-meta mono">
-          {{ site.posts | size }} posts{% if latest_post %} · latest {{ latest_post.date | date: "%b %-d" }}{% endif %}
+          {{ site.posts | size }} posts{% if latest_post %} · latest {{ latest_post.date | date: "%b %-d, %Y" }}{% endif %} · blog.g4g4n.com
         </p>
       </div>
     </footer>

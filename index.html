@@ -9,8 +9,9 @@ title: Dispatches for security operators and curious builders
   {% endif %}
 {% endfor %}
 <section class="hero section-anchor" id="intro" data-section="intro">
+  <div class="hero-aurora" aria-hidden="true"></div>
   <div class="hero-copy reveal">
-    <p class="eyebrow">Intro</p>
+    <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>Intro / Live feed</p>
     <h1>Operator writing for noisy security days.</h1>
     <p class="hero-lead">
       If the internet insists on turning every bug, breach, and dashboard into a dramatic monologue, this site is here to be less theatrical and more useful.
@@ -19,23 +20,40 @@ title: Dispatches for security operators and curious builders
       News is for the stories that matter now. Articles are for ideas worth keeping. Tracks are for learning the machinery in the right order, instead of collecting half-understood fragments like rare trading cards for people with terminal tabs.
     </p>
     <div class="hero-actions">
-      <a class="button primary" href="#news">Start with news</a>
+      <a class="button primary" href="#news">Start with news <span aria-hidden="true">&#8594;</span></a>
       <a class="button secondary" href="#articles">Read the articles</a>
     </div>
+    <dl class="hero-stats">
+      <div>
+        <dt>{{ site.posts | size }}</dt>
+        <dd>Posts published</dd>
+      </div>
+      <div>
+        <dt>3</dt>
+        <dd>Reading lanes</dd>
+      </div>
+      <div>
+        <dt class="mono">{{ site.posts.first.date | date: "%b %-d" }}</dt>
+        <dd>Latest dispatch</dd>
+      </div>
+    </dl>
   </div>
 
   <div class="guide-card reveal">
     <p class="panel-label mono">Read By Lane</p>
     <div class="guide-list">
       <article>
+        <span class="guide-index mono">01</span>
         <h2>News</h2>
         <p>Current reporting, reactions, and incidents with actual operator value.</p>
       </article>
       <article>
+        <span class="guide-index mono">02</span>
         <h2>Articles</h2>
         <p>Longer essays, technical judgment, and pieces meant to age decently.</p>
       </article>
       <article>
+        <span class="guide-index mono">03</span>
         <h2>Tracks</h2>
         <p>Stepwise lessons in networking, virtualization, systems, and security craft.</p>
       </article>
@@ -44,38 +62,50 @@ title: Dispatches for security operators and curious builders
 </section>
 
 <section class="news section-anchor" id="news" data-section="news">
-  <div class="stream reveal">
-    {% if lead_news %}
-    {% assign featured_category = lead_news.categories | first %}
-    <article class="stream-item">
+  <div class="section-heading reveal">
+    <p class="eyebrow"><span class="section-index mono">01</span> News</p>
+    <h2>What is worth slowing down for right now.</h2>
+    <p class="section-note">Current reporting and incidents, read for operator value instead of headline drama.</p>
+  </div>
+
+  {% if lead_news %}
+  {% assign featured_category = lead_news.categories | first %}
+  <a class="featured-card reveal" href="{{ lead_news.url }}">
+    <div class="featured-body">
       <p class="panel-label mono">
-        {% if featured_category == "news" %}News{% elsif featured_category == "skills" %}Track{% elsif featured_category == "reactions" %}Reaction{% else %}Article{% endif %}
+        {% if featured_category == "news" %}Lead News{% elsif featured_category == "reactions" %}Lead Reaction{% else %}Featured{% endif %}
       </p>
-      <h3><a href="{{ lead_news.url }}">{{ lead_news.title }}</a></h3>
-      <p>{{ lead_news.summary }}</p>
+      <h3>{{ lead_news.title }}</h3>
+      <p class="featured-summary">{{ lead_news.summary }}</p>
       <div class="article-meta">
         <span>{{ lead_news.date | date: "%B %-d, %Y" }}</span>
         {% if lead_news.tags and lead_news.tags.size > 0 %}
-        <span>{{ lead_news.tags | join: " / " }}</span>
+        <span class="tag-row">{% for tag in lead_news.tags limit:4 %}<span class="tag-chip">{{ tag }}</span>{% endfor %}</span>
         {% endif %}
       </div>
-    </article>
-    {% endif %}
+      <span class="inline-link">Read the dispatch <span aria-hidden="true">&#8594;</span></span>
+    </div>
+  </a>
+  {% endif %}
 
+  <div class="card-grid">
+    {% assign news_count = 0 %}
     {% for post in site.posts %}
       {% if post.categories contains 'news' or post.categories contains 'reactions' %}
         {% if lead_news and post.url != lead_news.url %}
+        {% assign news_count = news_count | plus: 1 %}
         {% assign category = post.categories | first %}
-        <article class="stream-item">
+        <a class="stream-card reveal" href="{{ post.url }}" style="--i: {{ news_count }}">
           <p class="panel-label mono">
-            {% if category == "news" %}News{% elsif category == "skills" %}Track{% elsif category == "reactions" %}Reaction{% else %}Article{% endif %}
+            {% if category == "news" %}News{% elsif category == "reactions" %}Reaction{% else %}Article{% endif %}
           </p>
-          <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-          <p>{{ post.summary }}</p>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.summary | truncatewords: 34 }}</p>
           <div class="article-meta">
             <span>{{ post.date | date: "%b %-d, %Y" }}</span>
           </div>
-        </article>
+        </a>
+        {% if news_count >= 8 %}{% break %}{% endif %}
         {% endif %}
       {% endif %}
     {% endfor %}
@@ -83,73 +113,69 @@ title: Dispatches for security operators and curious builders
 </section>
 
 <section class="articles section-anchor" id="articles" data-section="articles">
-  <div class="stream reveal">
+  <div class="section-heading reveal">
+    <p class="eyebrow"><span class="section-index mono">02</span> Articles</p>
+    <h2>Ideas worth keeping after the week's headlines fade.</h2>
+    <p class="section-note">Longer essays and technical judgment, meant to age decently.</p>
+  </div>
+
+  <div class="card-grid">
     {% assign article_count = 0 %}
     {% for post in site.posts %}
       {% unless post.categories contains 'news' or post.categories contains 'reactions' or post.categories contains 'skills' %}
       {% assign article_count = article_count | plus: 1 %}
-      {% assign category = post.categories | first %}
-      <article class="stream-item">
-        <p class="panel-label mono">
-          {% if category == "news" %}News{% elsif category == "skills" %}Track{% elsif category == "reactions" %}Reaction{% else %}Article{% endif %}
-        </p>
-        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-        <p>{{ post.summary }}</p>
+      <a class="stream-card reveal" href="{{ post.url }}" style="--i: {{ article_count }}">
+        <p class="panel-label mono">Article</p>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.summary | truncatewords: 34 }}</p>
         <div class="article-meta">
           <span>{{ post.date | date: "%b %-d, %Y" }}</span>
         </div>
-        <a class="inline-link" href="{{ post.url }}">Read article</a>
-      </article>
-      {% if article_count >= 5 %}
-        {% break %}
-      {% endif %}
+        <span class="inline-link">Read article <span aria-hidden="true">&#8594;</span></span>
+      </a>
+      {% if article_count >= 6 %}{% break %}{% endif %}
       {% endunless %}
     {% endfor %}
     {% if article_count == 0 %}
-      <article class="stream-item">
+      <div class="stream-card is-empty">
         <p class="panel-label mono">Article</p>
         <h3>More long-form articles are on the way.</h3>
-        <p>This section will collect essays, explainers, and durable writing that should still matter after the week’s headlines have faded.</p>
-      </article>
+        <p>This section will collect essays, explainers, and durable writing that should still matter after the week's headlines have faded.</p>
+      </div>
     {% endif %}
   </div>
 </section>
 
 <section class="tracks section-anchor" id="tracks" data-section="tracks">
   <div class="section-heading reveal">
-    <p class="eyebrow">Tracks</p>
+    <p class="eyebrow"><span class="section-index mono">03</span> Tracks</p>
     <h2>Knowledge lanes for building actual skill.</h2>
-    <p class="section-note">These are the long-running routes through the site, meant to compound over time.</p>
+    <p class="section-note">The long-running routes through the site, meant to compound over time.</p>
   </div>
 
-  <div class="stream reveal">
+  <div class="card-grid">
     {% assign track_count = 0 %}
     {% for post in site.posts %}
       {% if post.categories contains 'skills' %}
       {% assign track_count = track_count | plus: 1 %}
-      <article class="stream-item">
+      <a class="stream-card reveal" href="{{ post.url }}" style="--i: {{ track_count }}">
         <p class="panel-label mono">Track</p>
-        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-        <p>{{ post.summary }}</p>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.summary | truncatewords: 34 }}</p>
         <div class="article-meta">
           <span>{{ post.date | date: "%b %-d, %Y" }}</span>
-          {% if post.tags and post.tags.size > 0 %}
-          <span>{{ post.tags | join: " / " }}</span>
-          {% endif %}
         </div>
-        <a class="inline-link" href="{{ post.url }}">Read track</a>
-      </article>
-      {% if track_count >= 5 %}
-        {% break %}
-      {% endif %}
+        <span class="inline-link">Read track <span aria-hidden="true">&#8594;</span></span>
+      </a>
+      {% if track_count >= 6 %}{% break %}{% endif %}
       {% endif %}
     {% endfor %}
     {% if track_count == 0 %}
-      <article class="stream-item">
+      <div class="stream-card is-empty">
         <p class="panel-label mono">Track</p>
         <h3>The learning tracks are still being charted.</h3>
         <p>This lane will hold the longer skill-building routes through computing, systems, networking, automation, and the machinery underneath security work.</p>
-      </article>
+      </div>
     {% endif %}
   </div>
 </section>
